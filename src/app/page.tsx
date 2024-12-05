@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card"
 import {ChangeEvent, useState} from "react"
-import { error } from "console";
 
 const Page = () => {
   const [emailInput, setEmailInput] = useState<string>("")
