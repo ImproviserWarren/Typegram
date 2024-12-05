@@ -17,13 +17,28 @@ type postType = {
     postId: string,
     caption: string,
     likes: likesType,
-    comments: commentsType,
+    comments: commentsType,                 
     _id: string,
 }[];
 
 
 const Page = () => {
     const [posts, setPosts] = useState<postType>([]);
+    console.log(posts)
+    const getPost = async() => {
+        const jsonData = await fetch(
+            "https://instigram-ogiw.onrender.com"
+        );
+        const response = await jsonData.json()
+        setPosts(response);
+    };
+    useEffect(() => {
+        getPost();
+    }, []);
+
+    return (
+        <div></div>
+    )
 }
 
 export default Page;
