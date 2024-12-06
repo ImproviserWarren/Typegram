@@ -27,7 +27,7 @@ const Page = () => {
     console.log(posts)
     const getPost = async() => {
         const jsonData = await fetch(
-            "https://instigram-ogiw.onrender.com"
+            "https://frontgram.onrender.com/"
         );
         const response = await jsonData.json()
         setPosts(response);
