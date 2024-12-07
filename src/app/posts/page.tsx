@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect} from "react"
 
 type likesType = {
@@ -27,10 +28,11 @@ const Page = () => {
     console.log(posts)
     const getPost = async() => {
         const jsonData = await fetch(
-            "https://frontgram.onrender.com/"
+            "https://frontgram.onrender.com/posts"
         );
         const response = await jsonData.json()
         setPosts(response);
+        console.log(response)
     };
     useEffect(() => {
         getPost();
