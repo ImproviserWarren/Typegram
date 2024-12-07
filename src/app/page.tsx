@@ -1,5 +1,6 @@
 "use client"
 import { z } from "zod"
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card"
@@ -12,6 +13,7 @@ const Page = () => {
   const [usernameInput, setUsernameInput] = useState<string>("")
   const [userErrorMessage, setUserErrorMessage] = useState("")
   const [passwordError, setPasswordError] = useState("")
+
 
   const handleEmailInput = (event: ChangeEvent<HTMLInputElement>) => {
     setEmailInput(event.target.value);
@@ -28,15 +30,17 @@ const Page = () => {
   const validateUsername = () => {
     try {
       const parsedString: Username = usernameSchema.parse(usernameInput)
+      console.log(parsedString)
     } catch (error){
       if (error instanceof z.ZodError)
         setUserErrorMessage("No")
-    }
+    };
   }
 
   const validateEmail = () => {
     try {
       const parsedString: Email = emailSchema.parse(emailInput)
+      console.log(parsedString)
       setErrorMessage("")
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -59,6 +63,9 @@ const Page = () => {
   type Email = z.infer<typeof emailSchema>
   const passwordSchema = z.string().min(8).max(30)
   type Password = z.infer<typeof passwordSchema>
+
+
+
 
   return (
     <Card className="flex justify-center items-center h-[500px] w-[400px]">
