@@ -42,7 +42,7 @@ const Page = () => {
         const postsData = await res.json();
         setPosts(postsData);
     };
-    const getUsers = async () => {
+    const getUsers = async () => {  
     const res = await fetch("https://frontgram.onrender.com/users");
     const usersData = await res.json();
     console.log("Users:", usersData);
@@ -76,8 +76,9 @@ const Page = () => {
             <div id="below-header" className="h-[100px] w-[430px] py-2 bg-neutral-900 border-y-2 border-neutral-800">
                 <div id="inside-below-header" className="flex flex-row overflow-x-auto w-auto px-[8px]">
                         {users.map((user) => 
-                        <div className="flex flex-col"><div className="flex justify-start w-[80px] h-[120px] px-[4px] flex-col"><img src={user.profileImage} className="flex w-[56px] h-[56px] rounded-full"></img>
-                        <p className="text-white h-[16px] text-[12px] ">{user.username}</p>
+                        <div key={user._id} className="flex flex-col"><div className="flex justify-start w-[80px] h-[120px] px-[4px] flex-col">
+                            <img src={user.profileImage} className="flex w-[56px] h-[56px] rounded-full" alt={`${user.username}`}></img>
+                        <p className="text-white h-[16px] text-[12px]">{user.username}</p>
                         </div>
                         </div>  
                         )}
