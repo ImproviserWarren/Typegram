@@ -13,6 +13,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "i": "^0.3.7",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.462.0",
     "next": "^15.1.0",
     "tailwind-merge": "^2.5.5",
