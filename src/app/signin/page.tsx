@@ -2,10 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
-
+import { useRouter } from 'next/navigation';
 
 
 const Page = () => {
+    const router = useRouter();
     const [emailUsernameInput, setemailUsernameInput] = useState<string>("")
     const [passwordInput, setPasswordInput] = useState<string>("")
     const [errorMessage, setErrorMessage] = useState<string>("")
@@ -21,29 +22,39 @@ const Page = () => {
 
     const logIn = async () => {
         try {
-            const response = await fetch('https://frontgram.onrender.com/login', {
+            const response = await fetch('http://localhost:8080/login', {
                 method: "POST",
-                headers: { "Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     email: emailUsernameInput,
                     password: passwordInput
                 }),
-            })
+            });
+    
             const data = await response.json();
+            
             if (response.ok) {
-                window.location.href = '/posts'
-                console.log(`Signed In: ${data.token}`)
+                const token = data.token;
+                if (token) {
+                    localStorage.setItem("authToken", token);
+                    router.push('/posts');
+                    console.log(`Signed In: ${token}`);
+                } else {
+                    setErrorMessage("No token received");
+                }
             } else {
-                setErrorMessage("idk")
+                setErrorMessage(data.message || "Login failed");
             }
         } catch (err) {
-            setErrorMessage("failed login")
+            setErrorMessage("Login failed due to server error");
+            console.error(err);
         }
     }
+    
 
 
     const changeRegion = () => {
-        window.location.href = '/'
+        router.push('/')
     }
 
     return (
@@ -55,7 +66,8 @@ const Page = () => {
       </div>
       <div className="flex flex-col gap-2 place-items-center w-[350px] h-[229px] mt-[24px]">
             <div className="">
-                <Input onChange={handleUserMailInput} value={emailUsernameInput} placeholder="Email or username" className="w-[270px] text-white"></Input>   
+                <Input onChange={handleUserMailInput} value={emailUsernameInput} placeholder="Email or username" className="w-[270px] text-white"></Input>
+                {errorMessage && <p className="text-red-500 text-base">{errorMessage}</p>}
             </div>
             <div>
                 <Input onChange={handlePasswordInput} value={passwordInput} placeholder="Password" className="w-[270px] text-white"></Input>

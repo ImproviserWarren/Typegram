@@ -43,10 +43,16 @@ const Page = () => {
         setPosts(postsData);
     };
     const getUsers = async () => {
-    const res = await fetch("https://frontgram.onrender.com/users");
+    const res = await fetch("http://localhost:8080/users");
     const usersData = await res.json();
     console.log("Users:", usersData);
     setUsers(usersData);
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+        console.log("No token")
+    } else {
+        console.log(token)
+    }
 };
     useEffect(() => {
         getUsers();
