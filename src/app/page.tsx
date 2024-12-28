@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card"
 import {ChangeEvent, useState} from "react"
+import { useRouter } from "next/navigation";
 
 
 const Page = () => {
+  const router = useRouter()
   const [emailInput, setEmailInput] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("")
   const [passwordInput, setPasswordInput] = useState<string>("");
@@ -23,6 +25,7 @@ const Page = () => {
   const handlePasswordInput = (event: ChangeEvent<HTMLInputElement>) => {
     setPasswordInput(event.target.value);
   }
+  
   const validateUsername = () => {
     try {
       const parsedString: Username = usernameSchema.parse(usernameInput)
@@ -47,8 +50,12 @@ const Page = () => {
 
     const data = await response.json();
     if (response.ok) {
-      window.location.href = '/posts'
-      console.log(`Signed up: ${data.token}`);
+      const token = data.token;
+      if (token) {
+        localStorage.setItem("authToken", token); 
+        router.push('/posts')
+        console.log(`Signed up: ${data.token}`);
+      }
     } else {
       setErrorMessage(data.message)
     }
@@ -88,7 +95,7 @@ const Page = () => {
 
 
   const signButton = () => {
-    window.location.href = '/signin'
+    router.push('/signin')
   }
 
 

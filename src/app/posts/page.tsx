@@ -2,6 +2,8 @@
 import { useState, useEffect} from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Heart, House, SquarePlus } from "lucide-react"
+import { useRouter } from "next/navigation"
+
 
 
 type likesType = {
@@ -30,12 +32,18 @@ type userType = {
     profileImage: string
 }
 
-
-
-
-const Page = () => {
+const Page = () => {    
     const [posts, setPosts] = useState<postType>([]);
     const [users, setUsers] = useState<userType[]>([]);
+    const router =  useRouter();
+    const checkout = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null
+    console.log(checkout)
+    if (!checkout) {
+        console.log("error")
+        return (
+            <div className="text-black bg-white font-medium text-lg">Unauthorized access</div>
+        )
+    } else {
     console.log(posts)
     const getPost = async () => {
         const res = await fetch("https://frontgram.onrender.com/findPost");
@@ -54,15 +62,40 @@ const Page = () => {
         console.log(token)
     }
 };
+    const postPopulation = async() => {
+        try {
+            const response = await fetch('http://localhost:8080/posts/');
+            const postData = await response.json();
+            console.log("Post Id:", postData)
+        } catch (err){
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
         getUsers();
         getPost();
+        postPopulation();
         console.log(posts)
         console.log(users)
     }, []);
+
+
+    } 
+       const postPost = async () => {
+        const response =  await fetch('http://localhost:8080/createPost')
+        router.push('/')
+    }
+    const showPost = async () => {
+        const thatlink = "6753ba82eabe3a01d73699e7"
+        const response =  await fetch(`https://frontgram.onrender.com/posts?postId=${thatlink}`)
+        const postData = await response.json();
+        const realData = JSON.stringify(postData)
+        console.log(`You cliked on this ${realData}`)
+        router.push('/thatPage/')
+    }
     return (
         <div className="bg-black h-[31px]">
-            
             <div id="header" className="bg-black">
             <div className="flex items-center px-4 bg-black">
                 <div className="w-[326px]">
@@ -70,7 +103,7 @@ const Page = () => {
                 </div>
             <div className="flex justify-items-end place-items-center w-[72px] h-[44px]">
                 <div className="flex justify-center place-items-center w-[48px] h-[48px]">
-                <SquarePlus className="stroke-white"/>
+                <SquarePlus onClick={postPost} className="stroke-white"/>
                 </div>
             <Heart className="stroke-white"/>
             </div>
@@ -82,7 +115,7 @@ const Page = () => {
                         <div className="flex flex-col" key={user._id}><div className="flex justify-start w-[80px] h-[120px] px-[4px] flex-col"><img src={user.profileImage} className="flex w-[56px] h-[56px] rounded-full"></img>
                         <p className="text-white h-[16px] text-[12px] ">{user.username}</p>
                         </div>
-                        </div>  
+                        </div>
                         )}
                 </div>
             </div>
@@ -95,7 +128,7 @@ const Page = () => {
                         </div>
                     </div>
                     <div className="text-white">{post.UserId.username}</div>
-                    <div>
+                    <div onClick={showPost}>
                         <img src={post.postImg} className="w-[430px] h-[430px]"></img>
                         <div className="text-white">{post.caption}</div>
                     </div>     

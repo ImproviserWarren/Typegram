@@ -40,14 +40,14 @@ const Page = () => {
                     router.push('/posts');
                     console.log(`Signed In: ${token}`);
                 } else {
-                    setErrorMessage("No token received");
+                    setErrorMessage("No token");
                 }
             } else {
-                setErrorMessage(data.message || "Login failed");
+                setErrorMessage(data.message);
             }
-        } catch (err) {
-            setErrorMessage("Login failed due to server error");
-            console.error(err);
+        } catch (error) {
+            setErrorMessage("Failed due to server error");
+            console.error(error);
         }
     }
     
